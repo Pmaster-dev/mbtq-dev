@@ -1,0 +1,16 @@
+name: Federated Identity Sync
+
+on:
+  push:
+    paths:
+      - 'core/auth/**'
+  workflow_dispatch:
+
+jobs:
+  sync-identities:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Community Commons
+        run: |
+          echo "Syncing identity schema to @deaf-first repositories..."
+          # Logic to trigger downstream workflows or update metadata

@@ -33,7 +33,7 @@ REPOS=(
   "deafauth-ecosystem"
   "pinksync"
   "fibonrose"
-  "DEAF-FIRST-PLATFORM"
+  "mbtq-factory-hub"
   "mbtq-workspace"
   "Auto-API"
   "deaf-first-saas"
@@ -313,7 +313,7 @@ git diff  # See what was removed
 
 # Commit all changes
 cd ~/github/pinkycollie
-for repo in 360magicians pinkflow deafauth-ecosystem pinksync fibonrose DEAF-FIRST-PLATFORM mbtq-workspace Auto-API; do
+for repo in 360magicians pinkflow deafauth-ecosystem pinksync fibonrose mbtq-factory-hub mbtq-workspace Auto-API; do
   if [ -d "$repo" ]; then
     cd "$repo"
     git add .

@@ -1,0 +1,23 @@
+name: Federated Release Orchestrator
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  core-release:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'mbtq-dev'
+    steps:
+      - name: Publish Core
+        run: echo "Publishing @mbtq-dev core artifacts"
+
+  notify-commons:
+    needs: core-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Commons Update
+        run: |
+          echo "Notifying @deaf-first of new core release"
+          # Use GH CLI to trigger repository_dispatch in commons repos

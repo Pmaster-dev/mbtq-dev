@@ -1,0 +1,11 @@
+{
+  "name": "@mbtq-dev/factory-hub",
+  "version": "2.0.0",
+  "org": "@mbtq-dev",
+  "type": "orchestration",
+  "status": "OPERATIONAL",
+  "federation": {
+    "enabled": true,
+    "peers": ["@deaf-first/commons"]
+  }
+}
