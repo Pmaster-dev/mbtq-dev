@@ -108,6 +108,8 @@ export default function App() {
               triggerCelebration();
             }}
             className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full hover:from-purple-700 hover:to-pink-700 focus:outline-purple-700 transition-all hover:scale-110 font-bold shadow-lg hover:shadow-xl"
+            aria-expanded={showGenerator}
+            aria-label={showGenerator ? "Return to Dashboard" : "Open Generator"}
           >
             {showGenerator ? "Dashboard 🏠" : "Generator 🚀"}
           </button>
@@ -117,6 +119,8 @@ export default function App() {
               triggerCelebration();
             }}
             className="px-4 py-2 bg-blue-700 text-white rounded-full hover:bg-fuchsia-600 focus:outline-fuchsia-700 transition-all hover:scale-110 hover:rotate-3 font-bold shadow-lg hover:shadow-xl"
+            aria-expanded={showManifesto}
+            aria-label={showManifesto ? "Hide Manifesto" : "Show Manifesto"}
           >
             {showManifesto ? "Hide 👋" : "Manifesto ✨"}
           </button>
@@ -127,6 +131,8 @@ export default function App() {
               triggerCelebration();
             }}
             className="px-4 py-2 bg-gradient-to-r from-gray-700 to-purple-700 text-white rounded-full hover:from-gray-800 hover:to-purple-800 focus:outline-purple-700 transition-all hover:scale-110 font-bold shadow-lg hover:shadow-xl"
+            aria-expanded={showSignSystem}
+            aria-label={showSignSystem ? "Return to Dashboard" : "Open Sign System"}
           >
             {showSignSystem ? "Dashboard 🏠" : "Sign System 🤟"}
           </button>

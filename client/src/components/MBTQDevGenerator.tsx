@@ -109,7 +109,7 @@ const MBTQDevGenerator = () => {
               {/* App Type */}
               <div>
                 <label className="block text-sm font-medium mb-2 text-slate-300">Stack Type</label>
-                <div className="flex gap-2">
+                <div className="flex gap-2" role="group" aria-label="Select stack type">
                   {appTypes.map(type => (
                     <button
                       key={type}
@@ -119,6 +119,8 @@ const MBTQDevGenerator = () => {
                           ? 'bg-pink-500 text-white'
                           : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                       }`}
+                      aria-pressed={config.type === type}
+                      aria-label={`Select ${type} stack type`}
                     >
                       {type}
                     </button>
@@ -129,7 +131,7 @@ const MBTQDevGenerator = () => {
               {/* Auth */}
               <div>
                 <label className="block text-sm font-medium mb-2 text-slate-300">Authentication</label>
-                <div className="flex gap-2">
+                <div className="flex gap-2" role="group" aria-label="Select authentication type">
                   {authTypes.map(auth => (
                     <button
                       key={auth}
@@ -139,6 +141,8 @@ const MBTQDevGenerator = () => {
                           ? 'bg-purple-500 text-white'
                           : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                       }`}
+                      aria-pressed={config.auth === auth}
+                      aria-label={`Select ${auth} authentication`}
                     >
                       {auth}
                     </button>
@@ -149,7 +153,7 @@ const MBTQDevGenerator = () => {
               {/* Deploy */}
               <div>
                 <label className="block text-sm font-medium mb-2 text-slate-300">Deployment</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2" role="group" aria-label="Select deployment platform">
                   {deployTypes.map(deploy => (
                     <button
                       key={deploy}
@@ -159,6 +163,8 @@ const MBTQDevGenerator = () => {
                           ? 'bg-blue-500 text-white'
                           : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                       }`}
+                      aria-pressed={config.deploy === deploy}
+                      aria-label={`Deploy to ${deploy}`}
                     >
                       {deploy}
                     </button>
