@@ -98,16 +98,17 @@ export default function PinkSyncWidget({ socket, id, initial, onCelebrate }: Pro
               setAlertCount(c => c + 1);
               onCelebrate?.();
             }}
-            className="px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-700 text-white rounded-lg hover:from-pink-700 hover:to-pink-800 transition-all hover:scale-105 shadow-md hover:shadow-lg font-bold"
-            aria-live="polite"
+            className="px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-700 text-white rounded-lg hover:from-pink-700 hover:to-pink-800 transition-all hover:scale-105 shadow-md hover:shadow-lg font-bold focus:outline-none focus-visible:ring-4 focus-visible:ring-pink-400 focus-visible:ring-offset-2"
           >
             🔔 Visual Alert
           </button>
-          {alertCount > 0 && (
-            <span className="flex items-center text-sm font-bold text-pink-600 animate-pulse">
-              {alertCount} alert{alertCount > 1 ? 's' : ''} sent! 🎉
-            </span>
-          )}
+          <div aria-live="polite" aria-atomic="true">
+            {alertCount > 0 && (
+              <span className="flex items-center text-sm font-bold text-pink-600 animate-pulse">
+                {alertCount} alert{alertCount > 1 ? 's' : ''} sent! 🎉
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
