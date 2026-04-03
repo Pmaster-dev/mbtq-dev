@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Code, Database, Rocket, Zap, Shield, Eye } from 'lucide-react';
 
 interface Config {
@@ -313,4 +313,8 @@ const MBTQDevGenerator = () => {
   );
 };
 
-export default MBTQDevGenerator;
+// ⚡ Bolt Optimization: Memoize MBTQDevGenerator component
+// 💡 What: Wrapped MBTQDevGenerator export with React.memo()
+// 🎯 Why: Prevents unnecessary re-renders when parent state (like theme) changes, since this component has complex internal state but takes no props.
+// 📊 Impact: Eliminates heavy re-renders of the entire generator UI when the global theme changes or other App-level events occur.
+export default memo(MBTQDevGenerator);
