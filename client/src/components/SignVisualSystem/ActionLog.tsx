@@ -8,10 +8,20 @@ interface ActionLogProps {
 
 export const ActionLog: React.FC<ActionLogProps> = ({ events }) => {
   return (
-    <div className="bg-gray-900 rounded-lg p-4 max-h-64 overflow-y-auto">
-      <h3 className="text-lg font-bold text-white mb-3">Agent Activity</h3>
-      <div className="space-y-2">
-        {events.map((event, idx) => {
+    <div
+      className="bg-gray-900 rounded-lg p-4 max-h-64 overflow-y-auto focus-visible:ring-2 focus-visible:ring-purple-500 focus:outline-none"
+      tabIndex={0}
+      role="region"
+      aria-labelledby="action-log-title"
+      aria-live="polite"
+    >
+      <h3 id="action-log-title" className="text-lg font-bold text-white mb-3">Agent Activity</h3>
+
+      {events.length === 0 ? (
+        <div className="text-gray-500 text-sm italic text-center py-4">No recent activity</div>
+      ) : (
+        <div className="space-y-2">
+          {events.map((event, idx) => {
           const semantic = STATE_SEMANTICS[event.current];
           return (
             <div key={event.id || idx} className="flex items-start gap-3 text-sm">
@@ -26,8 +36,9 @@ export const ActionLog: React.FC<ActionLogProps> = ({ events }) => {
               </div>
             </div>
           );
-        })}
-      </div>
+          })}
+        </div>
+      )}
     </div>
   );
 };
