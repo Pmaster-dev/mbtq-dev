@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
+import { SsrfHttpAgent, SsrfHttpsAgent } from '../utils/ssrfAgent';
 
 const prisma = new PrismaClient();
 
@@ -60,6 +61,8 @@ export class WebhookService {
         },
         timeout: 10000, // 10 second timeout
         maxRedirects: 0, // Security: Prevent SSRF via HTTP redirects
+        httpAgent: new SsrfHttpAgent(),
+        httpsAgent: new SsrfHttpsAgent(),
       });
 
       // Update webhook event as successful
