@@ -5,11 +5,15 @@ export class StateEventBus {
   private listeners: Array<(event: AgentStateEvent) => void> = [];
 
   emit(event: AgentStateEvent): void {
-    const eventWithTimestamp = {
+    // ⚡ Bolt Optimization: Add stable unique identifiers to events
+    // 💡 What: Generate a UUID for each event if it doesn't have one.
+    // 🎯 Why: This allows components consuming the event stream (like ActionLog) to use a stable key for rendering, avoiding O(n) re-renders when prepending items.
+    const eventWithMeta = {
       ...event,
-      timestamp: event.timestamp || Date.now()
+      timestamp: event.timestamp || Date.now(),
+      id: event.id || crypto.randomUUID()
     };
-    this.listeners.forEach(listener => listener(eventWithTimestamp));
+    this.listeners.forEach(listener => listener(eventWithMeta));
   }
 
   subscribe(callback: (event: AgentStateEvent) => void): () => void {

@@ -18,20 +18,22 @@ export default function Manifesto() {
       </h2>
       <ul className="list-none ml-0 mt-4 text-base text-blue-800 space-y-3">
         {MANIFESTO_ITEMS.map((item, index) => (
-          <li
-            key={index}
-            className={`p-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 ${
-              selectedItem === index
-                ? 'bg-fuchsia-200 shadow-lg scale-105'
-                : 'bg-white/50 hover:bg-white/80'
-            }`}
-            onClick={() => setSelectedItem(selectedItem === index ? null : index)}
-          >
-            <span className="text-2xl mr-2">{item.emoji}</span>
-            {item.text}
-            {selectedItem === index && (
-              <span className="ml-2 text-pink-600 animate-pulse">← You clicked me! 💖</span>
-            )}
+          <li key={index}>
+            <button
+              className={`w-full text-left p-3 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-4 focus-visible:ring-fuchsia-400 ${
+                selectedItem === index
+                  ? 'bg-fuchsia-200 shadow-lg scale-105'
+                  : 'bg-white/50 hover:bg-white/80'
+              }`}
+              onClick={() => setSelectedItem(selectedItem === index ? null : index)}
+              aria-expanded={selectedItem === index}
+            >
+              <span className="text-2xl mr-2" aria-hidden="true">{item.emoji}</span>
+              {item.text}
+              {selectedItem === index && (
+                <span className="ml-2 text-pink-600 animate-pulse" aria-hidden="true">← You clicked me! 💖</span>
+              )}
+            </button>
           </li>
         ))}
       </ul>

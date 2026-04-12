@@ -50,14 +50,21 @@ export const SignerPanel: React.FC<SignerPanelProps> = ({
 
         {/* Confidence Indicator */}
         {state.confidence !== undefined && (
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-gray-800 rounded-full h-2 overflow-hidden">
+          <div
+            className="absolute bottom-4 left-4 right-4"
+            role="progressbar"
+            aria-valuenow={Math.round(state.confidence * 100)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Agent confidence"
+          >
+            <div className="bg-gray-800 rounded-full h-2 overflow-hidden" aria-hidden="true">
               <div 
                 className={`h-full ${semantic.color} transition-all duration-500`}
                 style={{ width: `${state.confidence * 100}%` }}
               />
             </div>
-            <span className="text-xs text-gray-400 mt-1 block">
+            <span className="text-xs text-gray-400 mt-1 block" aria-hidden="true">
               Confidence: {Math.round(state.confidence * 100)}%
             </span>
           </div>

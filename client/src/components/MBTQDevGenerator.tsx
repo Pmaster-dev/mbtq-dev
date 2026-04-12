@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Code, Database, Rocket, Zap, Shield, Eye } from 'lucide-react';
 
 interface Config {
@@ -21,6 +21,10 @@ interface Output {
   endpoints: string[];
 }
 
+const appTypes = ['webapp', 'api', 'fullstack'];
+const authTypes = ['deafauth', 'oauth', 'custom'];
+const deployTypes = ['docker', 'railway', 'fly.io', 'cloudflare'];
+
 const MBTQDevGenerator = () => {
   const [prompt, setPrompt] = useState('');
   const [config, setConfig] = useState<Config>({
@@ -31,10 +35,6 @@ const MBTQDevGenerator = () => {
   });
   const [generating, setGenerating] = useState(false);
   const [output, setOutput] = useState<Output | null>(null);
-
-  const appTypes = ['webapp', 'api', 'fullstack'];
-  const authTypes = ['deafauth', 'oauth', 'custom'];
-  const deployTypes = ['docker', 'railway', 'fly.io', 'cloudflare'];
 
   const generateApp = async () => {
     setGenerating(true);
@@ -92,14 +92,22 @@ const MBTQDevGenerator = () => {
             
             {/* Prompt Input */}
             <div className="bg-slate-900/50 backdrop-blur border border-slate-800 rounded-lg p-6">
-              <label className="block text-sm font-medium mb-3 text-slate-300">
-                Describe Your App
-              </label>
+              <div className="flex justify-between items-end mb-3">
+                <label htmlFor="app-description" className="block text-sm font-medium text-slate-300">
+                  Describe Your App <span className="text-pink-500" aria-hidden="true">*</span>
+                  <span className="sr-only"> (Required)</span>
+                </label>
+                <span className="text-xs text-slate-500" aria-live="polite">
+                  {prompt.length === 0 ? "Required to generate" : `${prompt.length} characters`}
+                </span>
+              </div>
               <textarea
+                id="app-description"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="e.g., Job board for Deaf designers with video portfolios..."
                 className="w-full h-32 bg-slate-950 border border-slate-700 rounded-lg p-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                required
               />
             </div>
 
@@ -109,16 +117,18 @@ const MBTQDevGenerator = () => {
               {/* App Type */}
               <div>
                 <label className="block text-sm font-medium mb-2 text-slate-300">Stack Type</label>
-                <div className="flex gap-2">
+                <div className="flex gap-2" role="group" aria-label="Select stack type">
                   {appTypes.map(type => (
                     <button
                       key={type}
                       onClick={() => setConfig({...config, type})}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-pink-500 ${
                         config.type === type
                           ? 'bg-pink-500 text-white'
                           : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                       }`}
+                      aria-pressed={config.type === type}
+                      aria-label={`Select ${type} stack type`}
                     >
                       {type}
                     </button>
@@ -129,16 +139,18 @@ const MBTQDevGenerator = () => {
               {/* Auth */}
               <div>
                 <label className="block text-sm font-medium mb-2 text-slate-300">Authentication</label>
-                <div className="flex gap-2">
+                <div className="flex gap-2" role="group" aria-label="Select authentication type">
                   {authTypes.map(auth => (
                     <button
                       key={auth}
                       onClick={() => setConfig({...config, auth})}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-purple-500 ${
                         config.auth === auth
                           ? 'bg-purple-500 text-white'
                           : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                       }`}
+                      aria-pressed={config.auth === auth}
+                      aria-label={`Select ${auth} authentication`}
                     >
                       {auth}
                     </button>
@@ -149,16 +161,18 @@ const MBTQDevGenerator = () => {
               {/* Deploy */}
               <div>
                 <label className="block text-sm font-medium mb-2 text-slate-300">Deployment</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2" role="group" aria-label="Select deployment platform">
                   {deployTypes.map(deploy => (
                     <button
                       key={deploy}
                       onClick={() => setConfig({...config, deploy})}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-blue-500 ${
                         config.deploy === deploy
                           ? 'bg-blue-500 text-white'
                           : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                       }`}
+                      aria-pressed={config.deploy === deploy}
+                      aria-label={`Deploy to ${deploy}`}
                     >
                       {deploy}
                     </button>
@@ -171,7 +185,7 @@ const MBTQDevGenerator = () => {
                 <span className="text-sm text-slate-300">Accessibility Suite</span>
                 <button
                   onClick={() => setConfig({...config, accessibility: !config.accessibility})}
-                  className={`relative w-12 h-6 rounded-full transition-all ${
+                  className={`relative w-12 h-6 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-green-500 ${
                     config.accessibility ? 'bg-green-500' : 'bg-slate-700'
                   }`}
                   role="switch"
@@ -190,7 +204,7 @@ const MBTQDevGenerator = () => {
             <button
               onClick={generateApp}
               disabled={!prompt || generating}
-              className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-4 rounded-lg font-bold text-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-4 rounded-lg font-bold text-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-purple-500 flex items-center justify-center gap-2"
             >
               {generating ? (
                 <>
@@ -267,7 +281,7 @@ const MBTQDevGenerator = () => {
                 </div>
 
                 {/* Deploy Button */}
-                <button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all">
+                <button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-green-500">
                   <Rocket className="w-5 h-5" />
                   Deploy to {config.deploy}
                 </button>
@@ -307,4 +321,8 @@ const MBTQDevGenerator = () => {
   );
 };
 
-export default MBTQDevGenerator;
+// ⚡ Bolt Optimization: Memoize MBTQDevGenerator component
+// 💡 What: Wrapped MBTQDevGenerator export with React.memo()
+// 🎯 Why: Prevents unnecessary re-renders when parent state (like theme) changes, since this component has complex internal state but takes no props.
+// 📊 Impact: Eliminates heavy re-renders of the entire generator UI when the global theme changes or other App-level events occur.
+export default memo(MBTQDevGenerator);

@@ -12,17 +12,26 @@ export const ConfidenceCue: React.FC<ConfidenceCueProps> = ({ confidence }) => {
     return 'bg-red-500';
   };
 
+  const percent = Math.round(confidence * 100);
+
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm text-gray-400">Certainty:</span>
-      <div className="flex-1 bg-gray-700 rounded-full h-2 overflow-hidden">
+    <div
+      className="flex items-center gap-2"
+      role="progressbar"
+      aria-valuenow={percent}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label="Agent certainty"
+    >
+      <span className="text-sm text-gray-400" aria-hidden="true">Certainty:</span>
+      <div className="flex-1 bg-gray-700 rounded-full h-2 overflow-hidden" aria-hidden="true">
         <div
           className={`h-full ${getColor()} transition-all duration-300`}
-          style={{ width: `${confidence * 100}%` }}
+          style={{ width: `${percent}%` }}
         />
       </div>
-      <span className="text-sm font-mono text-gray-300">
-        {Math.round(confidence * 100)}%
+      <span className="text-sm font-mono text-gray-300" aria-hidden="true">
+        {percent}%
       </span>
     </div>
   );

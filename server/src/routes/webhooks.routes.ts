@@ -22,40 +22,35 @@ router.post('/register', authenticateApiKey, async (req: AuthRequest, res: Respo
       return;
     }
 
-    // Validate URL format
+    // Validate URL format and prevent SSRF
     try {
-      const url = new URL(webhookUrl);
+      const parsedUrl = new URL(webhookUrl);
 
-      // Prevent SSRF attacks
-      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+      // Restrict protocols
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
         throw new Error('Invalid protocol');
       }
 
-      // Check for blocked hostnames/IPs
-      const blockedHosts = [
-        'localhost',
-        '127.0.0.1',
-        '0.0.0.0',
-        '::1',
-        '169.254.169.254', // AWS metadata
-      ];
+      // Block local and internal hostnames using robust validation to prevent SSRF
+      const hostname = parsedUrl.hostname.toLowerCase();
+      const cleanIp = hostname.replace(/^\[|\]$/g, '');
 
-      if (blockedHosts.includes(url.hostname)) {
-        throw new Error('Blocked host');
+      const ipv4Regex = /^(127\.\d+\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2[0-9]|3[0-1])\.\d+\.\d+|192\.168\.\d+\.\d+|169\.254\.\d+\.\d+|0\.\d+\.\d+\.\d+)$/;
+      const ipv6Regex = /^((::1)|(::)|(fc|fd)[0-9a-f]{2}:.*|(fe[89ab][0-9a-f]:.*)|(::ffff:.*))$/i;
+
+      if (
+        hostname === 'localhost' ||
+        hostname.endsWith('.local') ||
+        hostname.endsWith('.internal') ||
+        ipv4Regex.test(cleanIp) ||
+        ipv6Regex.test(cleanIp)
+      ) {
+        throw new Error('Forbidden hostname');
       }
-
-      // Regex for private/internal IP ranges (IPv4)
-      // Only block if the hostname is actually an IP address matching these ranges
-      const privateIpRegex = /^(10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.|127\.|169\.254\.)/;
-      const isIpAddress = /^(\d{1,3}\.){3}\d{1,3}$/.test(url.hostname);
-      if (isIpAddress && privateIpRegex.test(url.hostname)) {
-        throw new Error('Internal IPs are not allowed');
-      }
-
-    } catch (e) {
+    } catch (e: any) {
       res.status(400).json({
         error: 'Bad Request',
-        message: 'Invalid webhook URL format or restricted host',
+        message: 'Invalid or forbidden webhook URL',
       });
       return;
     }

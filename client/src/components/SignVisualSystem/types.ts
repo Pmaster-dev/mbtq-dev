@@ -22,6 +22,7 @@ export interface AgentStateData {
 
 export interface AgentStateEvent extends AgentStateData {
   timestamp?: number;
+  id?: string;
 }
 
 export interface StateSemantic {

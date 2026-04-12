@@ -14,7 +14,7 @@
     "project-management",
     "github-integration"
   ],
-  "author": "MBTQ Development Team",
+  "author": "Pinky Collie",
   "license": "MIT",
   "devDependencies": {
     "vitest": "^2.1.8"
