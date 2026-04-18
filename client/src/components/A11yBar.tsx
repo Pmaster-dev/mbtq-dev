@@ -45,7 +45,7 @@ export default function A11yBar() {
         )}
         <button
           onClick={() => setShowBadges(!showBadges)}
-          className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-3 py-1 rounded-full text-xs font-bold hover:from-indigo-600 hover:to-purple-600 transition-all hover:scale-105 shadow-md"
+          className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-3 py-1 rounded-full text-xs font-bold hover:from-indigo-600 hover:to-purple-600 transition-all hover:scale-105 shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
           aria-expanded={showBadges}
           aria-label="Toggle accessibility features badges"
         >
@@ -71,17 +71,18 @@ export default function A11yBar() {
       <div className="flex gap-3">
         <button
           onClick={() => setContrast(c => !c)}
-          className={`px-4 py-2 rounded-full text-white font-bold transition-all hover:scale-110 shadow-md hover:shadow-lg ${
+          className={`px-4 py-2 rounded-full text-white font-bold transition-all hover:scale-110 shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-pink-500 ${
             contrast
               ? 'bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-800 hover:to-black'
               : 'bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700'
           }`}
+          aria-pressed={contrast}
         >
           {contrast ? "🌙 Disable" : "☀️ Enable"} High Contrast
         </button>
         <button
           onClick={runAxeCheck}
-          className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 rounded-full text-white font-bold hover:from-blue-700 hover:to-indigo-700 transition-all hover:scale-110 shadow-md hover:shadow-lg"
+          className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 rounded-full text-white font-bold hover:from-blue-700 hover:to-indigo-700 transition-all hover:scale-110 shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
         >
           🔍 Run A11y Check
         </button>
