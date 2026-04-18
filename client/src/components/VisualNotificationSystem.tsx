@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 export type NotificationType = 'info' | 'success' | 'warning' | 'error';
 
@@ -69,6 +69,9 @@ function VisualNotificationComponent({ notification, onDismiss }: VisualNotifica
   );
 }
 
+// ⚡ Bolt Optimization: Memoize the notification component to prevent re-rendering all active notifications when the parent state changes.
+const MemoizedVisualNotificationComponent = React.memo(VisualNotificationComponent);
+
 /**
  * VisualNotificationSystem - Container for managing multiple visual notifications
  * Designed for deaf users - all notifications are visual, no audio
@@ -92,9 +95,10 @@ export default function VisualNotificationSystem() {
     };
   }, []);
 
-  const dismissNotification = (id: string) => {
+  // ⚡ Bolt Optimization: Provide a stable reference for the dismiss handler using useCallback, preventing unnecessary child re-renders.
+  const dismissNotification = useCallback((id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
-  };
+  }, []);
 
   return (
     <div 
@@ -104,7 +108,7 @@ export default function VisualNotificationSystem() {
     >
       {notifications.map((notification) => (
         <div key={notification.id} className="pointer-events-auto">
-          <VisualNotificationComponent
+          <MemoizedVisualNotificationComponent
             notification={notification}
             onDismiss={dismissNotification}
           />
