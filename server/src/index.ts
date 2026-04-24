@@ -14,10 +14,18 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+
+// Security: CORS configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN?.split(",") || ["http://localhost:5173"],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+const io = new Server(server, { cors: corsOptions });
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
