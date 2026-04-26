@@ -88,25 +88,25 @@ export default function SignVisualSystem() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <button
               onClick={simulateAgentFlow}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-blue-500"
             >
               Simulate Agent Flow
             </button>
             <button
               onClick={simulateError}
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-red-500"
             >
               Simulate Error State
             </button>
             <button
               onClick={simulateNeedsInput}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-indigo-500"
             >
               Simulate Needs Input
             </button>
             <button
               onClick={() => eventBus.emit({ current: AGENT_STATES.IDLE, actor: null, confidence: 1.0, requiresUser: false })}
-              className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+              className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-gray-500"
             >
               Reset to Idle
             </button>
@@ -115,13 +115,14 @@ export default function SignVisualSystem() {
           {/* Panel Configuration */}
           <div className="border-t border-gray-700 pt-6 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Panel Size</label>
-              <div className="flex gap-2">
+              <label id="panel-size-label" className="block text-sm font-medium text-gray-400 mb-2">Panel Size</label>
+              <div className="flex gap-2" role="group" aria-labelledby="panel-size-label">
                 {(['small', 'medium', 'large'] as const).map(size => (
                   <button
                     key={size}
                     onClick={() => setPanelSize(size)}
-                    className={`px-4 py-2 rounded ${panelSize === size ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+                    className={`px-4 py-2 rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-purple-500 ${panelSize === size ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                    aria-pressed={panelSize === size}
                   >
                     {size}
                   </button>
@@ -130,13 +131,14 @@ export default function SignVisualSystem() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Panel Position</label>
-              <div className="flex gap-2">
+              <label id="panel-position-label" className="block text-sm font-medium text-gray-400 mb-2">Panel Position</label>
+              <div className="flex gap-2" role="group" aria-labelledby="panel-position-label">
                 {(['left', 'center', 'right'] as const).map(pos => (
                   <button
                     key={pos}
                     onClick={() => setPosition(pos)}
-                    className={`px-4 py-2 rounded ${panelPosition === pos ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+                    className={`px-4 py-2 rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-purple-500 ${panelPosition === pos ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                    aria-pressed={panelPosition === pos}
                   >
                     {pos}
                   </button>
