@@ -8,7 +8,8 @@ interface SignerPanelProps {
   size?: 'small' | 'medium' | 'large';
 }
 
-export const SignerPanel: React.FC<SignerPanelProps> = ({ 
+// ⚡ Bolt Optimization: Added React.memo to prevent unnecessary re-renders when parent state updates.
+export const SignerPanel: React.FC<SignerPanelProps> = React.memo(({
   state, 
   position = 'right', 
   size = 'medium' 
@@ -83,4 +84,4 @@ export const SignerPanel: React.FC<SignerPanelProps> = ({
       </div>
     </div>
   );
-};
+});

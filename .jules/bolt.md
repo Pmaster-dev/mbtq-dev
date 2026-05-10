@@ -16,3 +16,6 @@
 ## 2024-05-24 - Chunked Concurrent Webhook Retries
 **Learning:** Sequential `await` in loops for network requests (like webhook deliveries with 10s timeouts) creates O(N) blocking, stalling the event loop and dramatically slowing down background processes.
 **Action:** Replace sequential `await` with chunked concurrent execution using `Promise.all()` (e.g., chunk size of 10) to optimize throughput without overwhelming external APIs or the Node event loop.
+## 2026-05-10 - React.memo Optimization in SignVisualSystem
+**Learning:** In highly dynamic components like `SignVisualSystem` that frequently emit state updates (e.g., via `eventBus.emit`), child components that rely on derived props from that state (like `SignerPanel` and `ActionLog`) will re-render unnecessarily if not memoized. This creates a performance bottleneck when the parent's state updates are frequent.
+**Action:** Always wrap presentation components in `React.memo` when they receive complex objects as props and are rendered by a parent component that undergoes frequent state changes.
