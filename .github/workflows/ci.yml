@@ -1,12 +1,15 @@
-# .github/workflows/ci.yml
+## .github/workflows/ci.yml
 name: CI
 on: [push, pull_request]
 jobs:
-  call-reusable:
-    uses: MBTQ-dev/mbtq.dev/.github/workflows/reusable-ci-models.yml@main
-    with:
-      changed_paths: ${{ join(github.event.commits.*.modified, ' ') }}
-      run_type: incremental
-    secrets:
-      GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-      GCS_MODEL_BUCKET: ${{ secrets.GCS_MODEL_BUCKET }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with: { node-version: 'latest', cache: 'pnpm' }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test -- --coverage
+      - run: pnpm build
