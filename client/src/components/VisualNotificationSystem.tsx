@@ -60,7 +60,7 @@ function VisualNotificationComponent({ notification, onDismiss }: VisualNotifica
       </div>
       <button
         onClick={() => onDismiss(notification.id)}
-        className="text-white hover:text-gray-200 text-2xl font-bold flex-shrink-0"
+        className="text-white hover:text-gray-200 text-2xl font-bold flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded px-1"
         aria-label="Dismiss notification"
       >
         ×

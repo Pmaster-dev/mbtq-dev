@@ -24,3 +24,7 @@
 ## 2025-05-24 - High-Contrast Focus Rings for Keyboard Accessibility
 **Learning:** Found instances where custom interactive UI elements, especially those overriding default outline styles, used low-contrast or hard-to-see `focus:outline-*` properties, or had poor default browser focus styles.
 **Action:** When creating custom interactive UI elements, always provide prominent, high-contrast visual focus indicators using Tailwind's `focus-visible:ring-*` utilities (e.g., `focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color]-400 focus-visible:ring-offset-2`).
+
+## 2025-05-24 - Inline Clear Actions for Textareas
+**Learning:** Generative AI forms often require users to input very long prompts. Providing no quick way to clear the text forces users to manually select all text to delete it, degrading the UX. Additionally, found that standard dismiss/close buttons (like an "×" icon) in custom notification systems often lack keyboard focus rings.
+**Action:** Always include an inline "Clear" action (e.g., a button inside or next to the textarea) for generative AI inputs to improve the editing flow. Always ensure custom dismiss buttons have explicit `focus-visible:ring` styles to guarantee keyboard navigation accessibility.
