@@ -18,15 +18,15 @@ jobs:
             https://auth.mbtq.dev
             https://sync.mbtq.dev
             https://trust.mbtq.dev
-          
+
           # Where to file issues
           repository: your-org/your-repo
-          
+
           # Personal Access Token with required permissions
           token: ${{ secrets.GH_TOKEN }}
-          
+
           # Cache key for results
           cache_key: pinksync-audit.json
-          
+
           # Optional: Skip Copilot assignment initially
           # skip_copilot_assignment: false
