@@ -34,3 +34,6 @@
 ## 2026-04-30 - [Concurrent Webhook Retries]
 **Learning:** In backend operations that iterate over potentially large datasets and make network calls (like webhook retries), using sequential `await` in a `for...of` loop causes O(N) network blocking, drastically slowing down processing.
 **Action:** Replace sequential `await` operations in loops with chunked concurrent execution using `Promise.all()` (e.g., chunk size of 10) to prevent O(N) network blocking without overwhelming the event loop or external APIs.
+## 2025-05-24 - Prisma $transaction for Sequential Writes in Project Submission
+**Learning:** Sequential `await` operations on database writes (like updating projects, requests, and creating logs sequentially) create O(N) network roundtrips, causing performance bottlenecks and stalling the event loop, especially when atomicity is desired.
+**Action:** Always batch consecutive Prisma database mutations using `await prisma.$transaction([...])` to guarantee atomicity and minimize network latency for significantly faster endpoint execution.
