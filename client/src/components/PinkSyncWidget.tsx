@@ -117,7 +117,11 @@ export default function PinkSyncWidget({ socket, id, initial, onCelebrate }: Pro
         height: coord.h,
         zIndex: 5,
       }}
+<<<<<<< Updated upstream
       className={`bg-pink-50 border-2 border-pink-500 rounded-xl shadow-lg p-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-pink-400 focus-visible:ring-offset-2 transition-all duration-300 cursor-move ${
+=======
+      className={`bg-pink-50 border-2 border-pink-500 rounded-xl shadow-lg p-4 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-pink-400 focus-visible:ring-offset-2 focus-visible:ring-offset-pink-50 transition-all duration-300 cursor-move ${
+>>>>>>> Stashed changes
         isHovered ? 'shadow-2xl scale-105 border-pink-600' : ''
       }`}
       tabIndex={0}
