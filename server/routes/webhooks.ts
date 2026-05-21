@@ -84,11 +84,13 @@ router.get('/events/types', (req, res) => {
   res.json({ success: true, count: events.length, events });
 });
 
-// 8. Manual Trigger (for testing)
+// Manual trigger + real event emitter
 router.post('/trigger', async (req, res) => {
   const { event, data } = req.body;
-  // TODO: dispatch to matching webhooks
-  res.json({ success: true, message: 'Event triggered' });
+  if (!event) return res.status(400).json({ success: false, error: 'event required' });
+
+  await WebhookService.emitEvent(event, data || {});
+  res.json({ success: true, message: `Event ${event} emitted` });
 });
 
 export default router;
