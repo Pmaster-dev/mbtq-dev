@@ -250,7 +250,16 @@ const MBTQDevGenerator = () => {
           {/* Output Section */}
           <div className="space-y-6">
             
-            {output ? (
+            {generating ? (
+              <div
+                className="bg-slate-900/50 backdrop-blur border border-slate-800 rounded-lg p-12 text-center flex flex-col items-center"
+                role="status"
+                aria-live="polite"
+              >
+                <div className="w-12 h-12 border-4 border-slate-700 border-t-pink-500 rounded-full animate-spin mb-4" aria-hidden="true" />
+                <p className="text-slate-400">Summoning magicians to build your stack...</p>
+              </div>
+            ) : output ? (
               <>
                 {/* Repo Info */}
                 <div className="bg-slate-900/50 backdrop-blur border border-slate-800 rounded-lg p-6">

@@ -48,3 +48,7 @@
 ## 2025-02-14 - Use aria-disabled with prop guard instead of native disabled
 **Learning:** Using the native `disabled` attribute on interactive elements (like buttons) completely removes them from the keyboard tab sequence. This means screen reader users and keyboard navigators can't access them to trigger tooltips or read their state when they are temporarily disabled (e.g., during a loading or checking state).
 **Action:** When a button's state needs to be communicated while it's temporarily disabled, use `aria-disabled="true"` coupled with a conditional prop guard on `onClick` (e.g. `onClick={isChecking ? undefined : handler}`) instead of `disabled={true}`. Wrap the button in a `group` and provide a tooltip (using `group-hover` and `group-focus-within`) that explains the state.
+
+## 2025-05-18 - Missing Loading State in Async Destination Areas
+**Learning:** In highly dynamic layout components (like `MBTQDevGenerator.tsx`) that trigger async operations which eventually populate a distinct, large empty "destination" area on the screen, just adding a loading spinner to the trigger button is insufficient UX. Users expect immediate visual feedback within the destination area itself (e.g., using `role="status"` and `aria-live="polite"`), otherwise the app appears broken or stalled while waiting for the operation to complete.
+**Action:** When auditing or implementing async data fetch/generation features that target a specific layout container, always implement a dedicated skeleton or loading text placeholder directly inside that target container.
