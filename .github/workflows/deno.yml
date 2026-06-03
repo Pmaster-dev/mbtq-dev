@@ -1,4 +1,5 @@
   deploy:
+    on: pull
     needs: ci
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
