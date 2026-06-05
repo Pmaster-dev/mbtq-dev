@@ -116,6 +116,12 @@ const MBTQDevGenerator = () => {
                 id="app-description"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
+                onKeyDown={(e) => {
+                  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    if (prompt && !generating) generateApp();
+                  }
+                }}
                 placeholder="e.g., Job board for Deaf designers with video portfolios..."
                 className="w-full h-32 bg-slate-950 border border-slate-700 rounded-lg p-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 required
@@ -231,6 +237,9 @@ const MBTQDevGenerator = () => {
                 <>
                   <Rocket className="w-5 h-5" />
                   Generate Stack
+                  <span className="hidden md:inline text-xs opacity-70 ml-2 font-normal" aria-hidden="true">
+                    (⌘/Ctrl + Enter)
+                  </span>
                 </>
               )}
               </button>
@@ -250,7 +259,16 @@ const MBTQDevGenerator = () => {
           {/* Output Section */}
           <div className="space-y-6">
             
-            {output ? (
+            {generating ? (
+              <div
+                className="bg-slate-900/50 backdrop-blur border border-slate-800 rounded-lg p-12 text-center flex flex-col items-center"
+                role="status"
+                aria-live="polite"
+              >
+                <div className="w-12 h-12 border-4 border-slate-700 border-t-pink-500 rounded-full animate-spin mb-4" aria-hidden="true" />
+                <p className="text-slate-400">Summoning magicians to build your stack...</p>
+              </div>
+            ) : output ? (
               <>
                 {/* Repo Info */}
                 <div className="bg-slate-900/50 backdrop-blur border border-slate-800 rounded-lg p-6">
