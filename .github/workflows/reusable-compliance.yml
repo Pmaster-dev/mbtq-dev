@@ -1,7 +1,0 @@
-# Create a new feature branch
-git checkout -b feature/new-login develop
-# Work on the feature and commit
-git commit -m "Implement new login feature"
-# Merge back to develop
-git checkout develop
-git merge feature/new-login

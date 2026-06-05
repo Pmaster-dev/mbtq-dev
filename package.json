@@ -12,7 +12,7 @@
     "handshake": "deafauth verify"
   },
   "dependencies": {
-    "next": "14.1.0",
+    "next": "latest\n\n",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@clerk/nextjs": "latest",
@@ -32,6 +32,6 @@
     "typescript": "^5.3.3"
   },
   "engines": {
-    "node": ">=18.17.0"
+    "node": ">=24.x.x"
   }
 }
