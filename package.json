@@ -17,7 +17,7 @@
     "react-dom": "^18.2.0",
     "@clerk/nextjs": "latest",
     "@supabase/supabase-js": "latest",
-    "@angular/cdk": "^17.0.0",
+    "@angular/cdk": "^22.0.2",
     "lucide-react": "latest",
     "clsx": "^2.1.0",
     "tailwind-merge": "^2.2.0"
