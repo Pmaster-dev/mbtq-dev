@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "next": "latest\n\n",
-    "react": "^18.2.0",
+    "react": "^19.2.7",
     "react-dom": "^18.2.0",
     "@clerk/nextjs": "latest",
     "@supabase/supabase-js": "latest",
