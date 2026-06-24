@@ -14,7 +14,7 @@
   "dependencies": {
     "next": "latest\n\n",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^19.2.7",
     "@clerk/nextjs": "latest",
     "@supabase/supabase-js": "latest",
     "@angular/cdk": "^22.0.2",
