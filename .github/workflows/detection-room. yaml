@@ -1,0 +1,45 @@
+name: Detection Room - Accessibility Scan
+on: [push, pull_request]
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install
+      
+      # 1️⃣ Automated a11y testing - already in MBTQ.dev [citation:2]
+      - name: Run axe-core accessibility tests
+        run: pnpm test:a11y
+      
+      # 2️⃣ TypeScript validation
+      - name: Type check
+        run: pnpm tsc --noEmit
+      
+      # 3️⃣ Security scanning
+      - name: Security audit
+        run: pnpm audit --prod
+      
+      # 4️⃣ Deaf-First: Visual-only notification check
+      - name: Verify visual notifications only
+        run: |
+          # Ensure no aria-hidden on notifications
+          ! grep -r "aria-hidden.*notification" ./client/src/ && \
+          echo "✅ All notifications are visible"
+      
+      # 5️⃣ Generate evidence for audit trail
+      - name: Archive detection results
+        uses: actions/upload-artifact@v4
+        with:
+          name: detection-evidence
+          path: |
+            test-results/
+            accessibility-report.json
