@@ -8,7 +8,7 @@ Project Context
 
 · Name: [ProjectName]
 · Auth Provider: [DeafAuth / Supabase / Custom]
-· Runtime: [Deno / Node.js / Python]
+· Runtime: [Node.js / Python]
 · Token Type: [JWT (current)] → [PASETO (target)]
 
 ---
@@ -18,21 +18,22 @@ Project Context
 File: auth/jwt.ts
 
 ```typescript
-// Current JWT utility (example using Deno)
-import { create, verify, getNumericDate } from "https://deno.land/x/djwt@v2.8/mod.ts";
+// Current JWT utility (example using Node.js)
+import jwt from "jsonwebtoken";
 
-const secretKey = Deno.env.get("JWT_SECRET") || "[fallback-dev-only]";
+const secretKey = process.env.JWT_SECRET || "[fallback-dev-only]";
 
 export async function createToken(payload: Record<string, unknown>) {
-  return await create(
-    { alg: "HS512", typ: "JWT" },
-    { ...payload, exp: getNumericDate(3600) },
-    secretKey
-  );
+  return jwt.sign(payload, secretKey, {
+    algorithm: "HS512",
+    expiresIn: "1h",
+  });
 }
 
 export async function verifyToken(token: string) {
-  return await verify(token, secretKey, "HS512");
+  return jwt.verify(token, secretKey, {
+    algorithms: ["HS512"],
+  });
 }
 ```
 
@@ -53,13 +54,13 @@ Problems with JWT (why migrate):
 
 Step 1: Add PASETO Library
 
-For Deno:
+For Node.js:
 
 ```typescript
 import { 
   V2,  // version 2 (recommended)
   generateKey 
-} from "https://deno.land/x/paseto@v2.1.0/mod.ts";
+} from "paseto";
 ```
 
 Step 2: Generate Keys
@@ -83,10 +84,10 @@ Step 3: Create PASETO Token Utility
 File: auth/paseto.ts
 
 ```typescript
-import { V2, decode } from "https://deno.land/x/paseto@v2.1.0/mod.ts";
+import { V2 } from "paseto";
 
-const secretKeyBase64 = Deno.env.get("PASETO_SECRET") || "[fallback-dev]";
-const key = Uint8Array.from(atob(secretKeyBase64), c => c.charCodeAt(0));
+const secretKeyBase64 = process.env.PASETO_SECRET || "[fallback-dev]";
+const key = Buffer.from(secretKeyBase64, "base64");
 
 export async function createPaseto(payload: Record<string, unknown>) {
   // Add expiration as footer (optional)
@@ -209,7 +210,7 @@ CI/CD: Ensure secret is injected securely.
 ├── routes/
 │   └── login.ts        (issues PASETO)
 ├── .env.example
-├── deno.json / package.json
+├── package.json
 └── README.md
 ```
 
@@ -218,11 +219,11 @@ CI/CD: Ensure secret is injected securely.
 7. Placeholder Values to Fill
 
 Placeholder Description Your Value
-[ProjectName] Name of your project 
-[DeafAuth / Supabase / Custom] Auth provider 
-[Deno / Node.js / Python] Runtime 
-[fallback-dev-only] Dev fallback secret (never in prod) 
-[base64-encoded-256-bit-key] Your generated PASETO key 
+[ProjectName] Name of your project
+[DeafAuth / Supabase / Custom] Auth provider
+[Node.js / Python] Runtime
+[fallback-dev-only] Dev fallback secret (never in prod)
+[base64-encoded-256-bit-key] Your generated PASETO key
 
 ---
 

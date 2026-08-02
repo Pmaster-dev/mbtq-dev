@@ -30,7 +30,7 @@ PinkSync (API Gateway)
 3. Dynamic Routing Logic (in PinkSync)
 
 ```typescript
-// In Netlify Edge Function or Deno gateway
+// In a Netlify Edge Function or backend gateway
 async function routeAccessibilityRequest(req: Request, user: DeafAuthUser) {
   const prefLang = user.accessibility_profile.primary_language;
   const mode = user.accessibility_profile.communication_mode;
@@ -161,4 +161,3 @@ accessibility-platform/
 ```
 
 ---
-

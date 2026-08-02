@@ -39,7 +39,7 @@ Frontend / Client
 
 Backend / API
 
-· Runtime: [Node.js / Deno / Python / Go / Rust / ...]
+· Runtime: [Node.js / Python / Go / Rust / ...]
 · Framework: [Express / NestJS / FastAPI / Gin / ...]
 · API Style: [REST / GraphQL / WebSocket / gRPC]
 

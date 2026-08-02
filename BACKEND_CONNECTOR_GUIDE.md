@@ -452,37 +452,33 @@ async function deleteFile(path: string) {
 
 ---
 
-## ⚡ Edge Functions (Serverless)
+## ⚡ Secure Backend Endpoints
 
-Edge Functions run on Supabase's infrastructure and can call external APIs securely.
+Use a trusted backend endpoint or service layer to call external APIs securely and keep secrets off the client.
 
-### Create an Edge Function
+### Create a Backend Endpoint
 
 ```bash
 # Install Supabase CLI
 npm install -g supabase
 
-# Initialize Supabase
-supabase init
-
-# Create a new function
-supabase functions new hello-world
+# Add the Supabase client to your backend
+npm install @supabase/supabase-js
 ```
 
-### Example Edge Function
+### Example Backend Handler
 
-`supabase/functions/hello-world/index.ts`:
+`server/src/routes/hello-world.ts`:
 
 ```typescript
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createClient } from '@supabase/supabase-js'
 
-serve(async (req) => {
+export async function createGreeting(req: Request) {
   try {
     // Get Supabase client with service role (has elevated permissions)
     const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      process.env.SUPABASE_URL ?? '',
+      process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
     )
 
     const { name } = await req.json()
@@ -500,27 +496,29 @@ serve(async (req) => {
     )
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
     )
   }
-})
+}
 ```
 
-### Call Edge Function from Frontend
+### Call Backend Endpoint from Frontend
 
 ```typescript
-async function callEdgeFunction(name: string) {
-  const { data, error } = await supabase.functions.invoke('hello-world', {
-    body: { name },
+async function callBackendEndpoint(name: string) {
+  const response = await fetch('/api/hello-world', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
   })
 
-  if (error) {
-    console.error('Error calling function:', error.message)
+  if (!response.ok) {
+    console.error('Error calling endpoint')
     return null
   }
 
-  return data
+  return response.json()
 }
 ```
 
@@ -567,18 +565,16 @@ async function getWeather(city: string) {
 }
 ```
 
-### Using Edge Functions for API Calls (Recommended)
+### Using Backend Endpoints for API Calls (Recommended)
 
 **Why?** Keeps API keys secure on the server side.
 
-`supabase/functions/fetch-weather/index.ts`:
+`server/src/routes/fetch-weather.ts`:
 
 ```typescript
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-
-serve(async (req) => {
+export async function fetchWeather(req: Request) {
   const { city } = await req.json()
-  const API_KEY = Deno.env.get('WEATHER_API_KEY')
+  const API_KEY = process.env.WEATHER_API_KEY
 
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
@@ -589,18 +585,20 @@ serve(async (req) => {
   return new Response(JSON.stringify(data), {
     headers: { 'Content-Type': 'application/json' },
   })
-})
+}
 ```
 
 Call from frontend:
 
 ```typescript
 async function getWeather(city: string) {
-  const { data, error } = await supabase.functions.invoke('fetch-weather', {
-    body: { city },
+  const response = await fetch('/api/fetch-weather', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ city }),
   })
 
-  return data
+  return response.json()
 }
 ```
 
@@ -666,14 +664,12 @@ async function safeApiCall<T>(
 
 ### 5. Rate Limiting
 
-Use Supabase Edge Functions with rate limiting:
+Use your backend endpoint or API gateway with rate limiting:
 
 ```typescript
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-
 const rateLimitMap = new Map<string, number>()
 
-serve(async (req) => {
+export async function rateLimitedHandler(req: Request) {
   const ip = req.headers.get('x-forwarded-for') || 'unknown'
   const now = Date.now()
   const lastRequest = rateLimitMap.get(ip) || 0
@@ -687,7 +683,7 @@ serve(async (req) => {
 
   // Your function logic here
   return new Response('OK')
-})
+}
 ```
 
 ---

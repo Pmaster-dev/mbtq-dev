@@ -178,7 +178,7 @@ GitHub Pages Root (/)
 - **Database**: CRUD operations, complex queries, RLS policies
 - **Real-time**: Live subscriptions, broadcast channels
 - **Storage**: File upload, download, deletion
-- **Edge Functions**: Serverless functions with Deno
+- **Backend Endpoints**: Server-side integration patterns for secure API access
 - **API Integration**: Finding APIs, making calls, security
 - **Security**: Best practices, input validation, rate limiting
 

@@ -7,7 +7,7 @@ metadata:
 
 handshake_protocol:
   auth: DeafAuth_Rust_WASM
-  gateway: PinkSync_Deno_Edge
+  gateway: PinkSync_Quantum_Gateway
   trust: Fibonrose_Evidence_v1
 
 compliance_rules:

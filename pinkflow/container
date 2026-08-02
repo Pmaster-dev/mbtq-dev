@@ -212,9 +212,9 @@ async def run_in_firecracker(code_path, language, test_suite, user_id):
     if language == "python":
         cmd = ["python", "-c", f"exec(open('{code_path}').read())"]
     elif language == "javascript":
-        cmd = ["deno", "run", "--allow-none", code_path]
+        cmd = ["node", code_path]
     elif language == "typescript":
-        cmd = ["deno", "run", "--allow-none", code_path]
+        cmd = ["npx", "tsx", code_path]
     else:
         raise HTTPException(400, f"Unsupported language: {language}")
     
@@ -467,4 +467,3 @@ Fibonrose Trust & blockchain Results anchored on-chain
 Partners End users Get verified, get NFTs, integrate
 
 This is Pinkflow as the full container — the process layer that brings together identity (DeafAUTH), execution (PinkSync), trust (Fibonrose), and AI (360 Magicians) to serve the MBTQ ecosystem.
-
