@@ -9,7 +9,7 @@ from typing import Any, Dict, List
 import cv2
 import numpy as np
 
-from .base import SignAIProvider
+from .base import SignAIProvider, safe_temp_video
 
 logger = logging.getLogger(__name__)
 
@@ -49,10 +49,7 @@ class AWSRekognitionProvider(SignAIProvider):
         )
 
     async def process_video(self, video_bytes: bytes, fmt: str = "mp4") -> Dict[str, Any]:
-        with tempfile.NamedTemporaryFile(suffix=f".{fmt}", delete=False) as f:
-            f.write(video_bytes)
-            tmp = f.name
-
+        tmp = safe_temp_video(video_bytes, fmt)
         try:
             cap = cv2.VideoCapture(tmp)
             frames: List[np.ndarray] = []

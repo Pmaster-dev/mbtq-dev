@@ -18,13 +18,14 @@ import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from modules.deafauth import DeafAuthService
 from modules.fibonrose import FibonRoseEngine
 from modules.pinksync import PinkSyncMessaging
 from modules.signai import SignAIProcessor
 from modules.deaf_components import DeafUIService
+from providers.base import ALLOWED_VIDEO_FORMATS, safe_temp_video
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -113,11 +114,28 @@ class VideoRequest(BaseModel):
     format: str = "mp4"
     provider: Optional[str] = None  # aws | azure | google | openai | local
 
+    @field_validator("format")
+    @classmethod
+    def validate_format(cls, v: str) -> str:
+        v = v.lower().lstrip(".")
+        if v not in ALLOWED_VIDEO_FORMATS:
+            raise ValueError(f"format must be one of {sorted(ALLOWED_VIDEO_FORMATS)}")
+        return v
+
+
 class TrainingRequest(BaseModel):
     video_base64: str
     label: str
     signer_id: str
     format: str = "mp4"
+
+    @field_validator("format")
+    @classmethod
+    def validate_format(cls, v: str) -> str:
+        v = v.lower().lstrip(".")
+        if v not in ALLOWED_VIDEO_FORMATS:
+            raise ValueError(f"format must be one of {sorted(ALLOWED_VIDEO_FORMATS)}")
+        return v
 
 class TextToASLRequest(BaseModel):
     text: str
@@ -337,24 +355,21 @@ async def add_training_data(
     current_user: Dict[str, Any] = Depends(verify_deaf_auth),
 ) -> Dict[str, Any]:
     """Add labelled training video to the local provider database."""
-    import tempfile
-
     svc: DeafFirstServices = app.state.svc
     video_bytes = base64.b64decode(req.video_base64)
 
-    with tempfile.NamedTemporaryFile(suffix=f".{req.format}", delete=False) as f:
-        f.write(video_bytes)
-        tmp = f.name
-
+    tmp = safe_temp_video(video_bytes, req.format)
     cap = cv2.VideoCapture(tmp)
     frames: List[np.ndarray] = []
-    while cap.isOpened():
-        ok, frame = cap.read()
-        if not ok:
-            break
-        frames.append(frame)
-    cap.release()
-    os.unlink(tmp)
+    try:
+        while cap.isOpened():
+            ok, frame = cap.read()
+            if not ok:
+                break
+            frames.append(frame)
+    finally:
+        cap.release()
+        os.unlink(tmp)
 
     return await svc.signai.add_training_data(frames, req.label, req.signer_id)
 

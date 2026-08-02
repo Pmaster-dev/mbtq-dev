@@ -9,7 +9,7 @@ from typing import Any, Dict, List
 import cv2
 import numpy as np
 
-from .base import SignAIProvider
+from .base import SignAIProvider, safe_temp_video
 
 logger = logging.getLogger(__name__)
 
