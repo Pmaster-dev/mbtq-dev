@@ -7,6 +7,11 @@ export interface ApiKey {
 
 export interface AuthRequest extends Request {
   companyId?: string;
+  creator?: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
 export interface WebhookPayload {

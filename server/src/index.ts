@@ -4,7 +4,6 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import helmet from 'helmet';
 import { rateLimit } from 'express-rate-limit';
-
 import dotenv from 'dotenv';
 
 // Import routes
@@ -20,51 +19,39 @@ const server = http.createServer(app);
 
 // Security: CORS configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN?.split(",") || ["http://localhost:5173"],
+  origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:5173'],
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
 
-const io = new Server(server, { cors: corsOptions });
-
-
-// Security: Helmet and Rate Limiting
+// Security: Helmet for HTTP security headers
 app.use(helmet());
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  message: { error: 'Too many requests, please try again later.' }
-});
-
-app.use('/api', limiter);
-
-// Middleware
+// Security: CORS
 app.use(cors(corsOptions));
 
-// Security: Helmet for HTTP headers
-app.use(helmet());
-
-// Security: Rate limiting
+// Security: Rate limiting on all API routes
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  limit: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
   message: {
     error: 'Too Many Requests',
-    message: 'Too many requests from this IP, please try again after 15 minutes.'
-  }
+    message: 'Too many requests from this IP, please try again after 15 minutes.',
+  },
 });
 app.use('/api/', limiter);
 
+// Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check endpoint
-app.get('/', (req: Request, res: Response) => {
+// Socket.IO with CORS
+const io = new Server(server, { cors: corsOptions });
+
+// Health check
+app.get('/', (_req: Request, res: Response) => {
   res.json({
     status: 'PinkSync Content Fulfillment API running',
     version: '1.0.0',
@@ -103,7 +90,7 @@ io.on('connection', (socket) => {
 });
 
 // Error handling middleware
-app.use((err: any, req: Request, res: Response, next: any) => {
+app.use((err: any, _req: Request, res: Response, _next: any) => {
   console.error('Unhandled error:', err);
   res.status(500).json({
     error: 'Internal Server Error',

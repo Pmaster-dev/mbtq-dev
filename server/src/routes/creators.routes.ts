@@ -1,8 +1,8 @@
 import { Router, Response, Request } from 'express';
 import { PrismaClient, RequestStatus, ProjectStatus } from '@prisma/client';
 import { WebhookService } from '../services/webhook.service';
-import { authenticateCreator } from '../middleware/auth'; // you need to implement this
-import prisma from '../db'; // singleton instance
+import { authenticateCreator, AuthRequest } from '../middleware/auth';
+import prisma from '../db';
 
 const router = Router();
 
@@ -20,10 +20,10 @@ function parsePositiveNumber(value: any, defaultValue?: number): number | null {
  * POST /api/creators/bids
  * Creator submits a bid for a request
  */
-router.post('/bids', authenticateCreator, async (req: Request, res: Response) => {
+router.post('/bids', authenticateCreator, async (req: AuthRequest, res: Response) => {
   try {
     const { requestId, amount, proposal, estimatedDays } = req.body;
-    const creatorId = req.creator.id; // from auth middleware
+    const creatorId = req.creator!.id;
 
     if (!requestId || !amount || !proposal) {
       res.status(400).json({
@@ -140,11 +140,11 @@ router.get('/requests/available', async (req: Request, res: Response) => {
  * POST /api/creators/projects/:id/submit
  * Creator submits completed project
  */
-router.post('/projects/:id/submit', authenticateCreator, async (req: Request, res: Response) => {
+router.post('/projects/:id/submit', authenticateCreator, async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { deliverableUrl, notes } = req.body;
-    const creatorId = req.creator.id;
+    const creatorId = req.creator!.id;
 
     if (!deliverableUrl || typeof deliverableUrl !== 'string') {
       res.status(400).json({ error: 'Bad Request', message: 'Deliverable URL is required' });

@@ -7,3 +7,131 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum RequestStatus {
+  PENDING
+  OPEN_FOR_BIDS
+  BID_ACCEPTED
+  COMPLETED
+  CANCELLED
+}
+
+enum ProjectStatus {
+  IN_PROGRESS
+  SUBMITTED
+  COMPLETED
+  CANCELLED
+}
+
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum WebhookStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model Company {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  apiKey        String         @unique
+  webhookUrl    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  requests      Request[]
+  webhookEvents WebhookEvent[]
+}
+
+model Creator {
+  id                String    @id @default(cuid())
+  name              String
+  email             String    @unique
+  skills            String[]
+  rating            Float     @default(0)
+  completedProjects Int       @default(0)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  bids              Bid[]
+  projects          Project[]
+}
+
+model Request {
+  id           String             @id @default(cuid())
+  companyId    String
+  company      Company            @relation(fields: [companyId], references: [id])
+  title        String
+  description  String
+  requirements Json
+  serviceType  String
+  budget       Float?
+  deadline     DateTime?
+  status       RequestStatus      @default(PENDING)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  bids         Bid[]
+  project      Project?
+  statusLogs   RequestStatusLog[]
+}
+
+model Bid {
+  id            String    @id @default(cuid())
+  requestId     String
+  request       Request   @relation(fields: [requestId], references: [id])
+  creatorId     String
+  creator       Creator   @relation(fields: [creatorId], references: [id])
+  amount        Float
+  proposal      String
+  estimatedDays Int?
+  status        BidStatus @default(PENDING)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Project {
+  id             String        @id @default(cuid())
+  requestId      String        @unique
+  request        Request       @relation(fields: [requestId], references: [id])
+  creatorId      String
+  creator        Creator       @relation(fields: [creatorId], references: [id])
+  status         ProjectStatus @default(IN_PROGRESS)
+  deliverableUrl String?
+  notes          String?
+  completedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model RequestStatusLog {
+  id        String   @id @default(cuid())
+  requestId String
+  request   Request  @relation(fields: [requestId], references: [id])
+  oldStatus String?
+  newStatus String
+  changedBy String
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+model WebhookEvent {
+  id          String        @id @default(cuid())
+  companyId   String
+  company     Company       @relation(fields: [companyId], references: [id])
+  event       String
+  payload     Json
+  url         String
+  status      WebhookStatus @default(PENDING)
+  attempts    Int           @default(0)
+  lastAttempt DateTime?
+  response    String?
+  createdAt   DateTime      @default(now())
+}
+
