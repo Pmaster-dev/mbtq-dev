@@ -72,7 +72,7 @@ Follow the [GitHub Pages Setup Guide](./GITHUB_PAGES_SETUP.md) to deploy your ow
    - Alternative hosting (Vercel, Netlify)
 
 ### Advanced AI
-5. **[llm-deno-supabase.md](./llm-deno-supabase.md)** - Enterprise AI patterns
+5. **[llm-quantum-supabase.md](./llm-quantum-supabase.md)** - Quantum AI architecture patterns
    - Multi-model routing
    - Cost optimization
    - Edge functions with AI
@@ -186,7 +186,7 @@ Time: 45 minutes
 
 **Goal**: Add generative AI to your app
 
-Read: [llm-deno-supabase.md](./llm-deno-supabase.md)
+Read: [llm-quantum-supabase.md](./llm-quantum-supabase.md)
 
 Key concepts:
 - Edge functions with AI APIs
@@ -279,7 +279,7 @@ npm run build
 - Store conversation history
 - Real-time typing indicators
 - **Time**: 4-6 hours
-- **Guide**: llm-deno-supabase.md
+- **Guide**: llm-quantum-supabase.md
 
 ### 3. File Sharing Platform
 - User authentication

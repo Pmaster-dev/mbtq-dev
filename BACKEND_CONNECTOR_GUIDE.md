@@ -696,7 +696,7 @@ serve(async (req) => {
 
 - [Supabase Documentation](https://supabase.com/docs)
 - [Supabase JavaScript Client](https://supabase.com/docs/reference/javascript)
-- [Deno Deploy](https://deno.com/deploy)
+- [Supabase Edge Functions](https://supabase.com/docs/guides/functions)
 - [MDN Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
 
 ---

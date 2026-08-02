@@ -27,7 +27,7 @@
 > - [Contributing Guide](./CONTRIBUTING.md) - How to contribute
 > - [Backend Connector Guide](./BACKEND_CONNECTOR_GUIDE.md) - Complete Supabase & API integration guide
 > - [GitHub Pages Setup](./GITHUB_PAGES_SETUP.md) - Deploy your own instance
-> - [LLM Integration Guide](./llm-deno-supabase.md) - Advanced AI integration patterns
+> - [LLM Integration Guide](./llm-quantum-supabase.md) - Quantum-oriented AI integration patterns
 > - **MBTQ Ecosystem** – [Developer-Magician API](https://github.com/pinkycollie/Developer-Magician) (Deaf-first accessibility validation), [PinkFlow](https://github.com/pinkycollie/pinkflow) (test automation & ecosystem)
 
 ## 📢 Platform Evolution
@@ -348,7 +348,7 @@ The bottom bar provides:
 - ✅ **No Secrets in Code** - Best practices enforced
 
 ### CI/CD Pipeline (Build & Deploy)
-- ✅ **Build (CI)** – On every push/PR: Node 20 (from `.nvmrc`), Vite client build, client + fibonrose tests, Deno checks. [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+- ✅ **Build (CI)** – On every push/PR: Node-based builds and tests for the code that lives in this repository. [`.github/workflows/node.js.yml`](.github/workflows/node.js.yml)
 - ✅ **Deploy** – On push to `main`: build client and deploy to GitHub Pages. [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
 - ✅ **Release** – On version tags: test, security audit, build artifact, GitHub Release. [`.github/workflows/release.yml`](.github/workflows/release.yml)
 - ✅ **Type Checking** - TypeScript validation in CI
@@ -644,9 +644,9 @@ const { data } = supabase.storage
 
 ### Integrating Generative AI
 
-For complete AI integration patterns with Deno Edge Functions and multiple LLM providers, see our comprehensive guide:
+For the current repo direction around quantum orchestration, Supabase, and multiple LLM providers, see:
 
-📖 **[LLM + Deno + Supabase Architecture Guide](./llm-deno-supabase.md)**
+📖 **[LLM + Quantum + Supabase Architecture Guide](./llm-quantum-supabase.md)**
 
 This guide covers:
 - Multi-model AI routing (GPT-4, Claude, Gemini)

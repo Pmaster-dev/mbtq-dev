@@ -58,9 +58,9 @@ This document summarizes the comprehensive audit and modernization of the MBTQ.d
    - Custom domain configuration
    - Alternative hosting options (Vercel, Netlify, Cloudflare Pages)
 
-3. **Updated llm-deno-supabase.md**
-   - Already existed with enterprise LLM patterns
-   - Integrated references into new documentation
+3. **Replaced with llm-quantum-supabase.md**
+   - Keeps the AI architecture guide aligned with the repo's quantum direction
+   - Removes the old Deno-specific positioning from repository-level documentation
 
 ---
 
@@ -309,7 +309,7 @@ This modernization provides:
 5. Deploy to Vercel/Netlify for best performance
 
 ### For AI Integration
-1. Read `llm-deno-supabase.md`
+1. Read `llm-quantum-supabase.md`
 2. Set up Supabase Edge Functions
 3. Configure AI API keys
 4. Implement AI features with our patterns
