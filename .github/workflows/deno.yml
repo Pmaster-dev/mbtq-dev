@@ -1,6 +1,17 @@
+name: Deno Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
   deploy:
-    on: pull
-    needs: ci
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
@@ -9,7 +20,7 @@
         uses: actions/checkout@v4
 
       - name: Setup Deno
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@v2
 
       - name: Build Site
         run: deno task build

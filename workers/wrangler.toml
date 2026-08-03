@@ -1,0 +1,27 @@
+name = "mbtq-workers"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+
+# Quick Functions (lightweight, sub-millisecond cold starts)
+[[rules]]
+type = "ESModule"
+globs = ["**/*.ts"]
+
+# Staging environment
+[env.staging]
+name = "mbtq-workers-staging"
+vars = { ENVIRONMENT = "staging" }
+
+# KV Namespaces (uncomment and replace IDs after creating via Wrangler)
+# [[kv_namespaces]]
+# binding = "MBTQ_KV"
+# id = "YOUR_KV_NAMESPACE_ID"
+
+# Durable Objects (uncomment to enable stateful edge logic)
+# [[durable_objects.bindings]]
+# name = "MBTQ_DO"
+# class_name = "MbtqDurableObject"

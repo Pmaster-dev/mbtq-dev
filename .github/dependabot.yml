@@ -15,7 +15,6 @@ updates:
     labels:
       - "dependencies"
       - "npm"
-    # Group all patch and minor updates together
     groups:
       development-dependencies:
         patterns:
@@ -38,10 +37,61 @@ updates:
           - "vitest*"
         update-types:
           - "patch"
-    # Security updates have higher priority
     commit-message:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
+      include: "scope"
+
+  # Track Cloudflare Workers (npm) dependencies separately
+  - package-ecosystem: "npm"
+    directory: "/workers"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "pinkycollie"
+    assignees:
+      - "pinkycollie"
+    labels:
+      - "dependencies"
+      - "cloudflare-workers"
+    commit-message:
+      prefix: "chore(deps-workers)"
+      include: "scope"
+
+  # Track Docker base image updates
+  - package-ecosystem: "docker"
+    directory: "/client"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    reviewers:
+      - "pinkycollie"
+    assignees:
+      - "pinkycollie"
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "chore(deps-docker)"
+      include: "scope"
+
+  - package-ecosystem: "docker"
+    directory: "/server"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    reviewers:
+      - "pinkycollie"
+    assignees:
+      - "pinkycollie"
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "chore(deps-docker)"
       include: "scope"
 
   # Enable version updates for GitHub Actions
