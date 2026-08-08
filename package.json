@@ -20,7 +20,7 @@
     "@angular/cdk": "^22.0.2",
     "lucide-react": "latest",
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.2.0"
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
