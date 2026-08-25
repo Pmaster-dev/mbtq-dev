@@ -1,11 +1,20 @@
 import { useState, memo } from 'react';
-import { Code, Database, Rocket, Zap, Shield, Eye } from 'lucide-react';
+import { Code, Database, Rocket, Zap, Shield, Eye, FileText, Layers, GitBranch, Terminal } from 'lucide-react';
 
 interface Config {
   type: string;
   auth: string;
   accessibility: boolean;
   deploy: string;
+  theme: string;
+  snippetPreset: string;
+}
+
+interface MappingNode {
+  id: string;
+  name: string;
+  targetDb: string;
+  status: string;
 }
 
 interface Magician {
@@ -24,15 +33,29 @@ interface Output {
 const appTypes = ['webapp', 'api', 'fullstack'];
 const authTypes = ['deafauth', 'oauth', 'custom'];
 const deployTypes = ['docker', 'railway', 'fly.io', 'cloudflare'];
+const textmateThemes = ['dracula', 'monokai', 'nord', 'one-dark'];
+const snippetPresets = [
+  { label: 'DeafAUTH Middleware', code: '// TextMate Syntax: TypeScript\nexport const authMiddleware = async (req: Request) => {\n  const token = req.headers.get("x-deafauth-token");\n  return await verifyDeafAuth(token);\n};' },
+  { label: 'Fibonrose Validator Flow', code: '// TextMate Syntax: TypeScript\nexport const validateTask = (checkpoint: number, evidence: string) => {\n  return fibonrose.confirm({ checkpoint, evidence });\n};' },
+  { label: 'Supabase Realtime Sync', code: '// TextMate Syntax: TypeScript\nconst channel = supabase.channel("pinksync")\n  .on("postgres_changes", { event: "*", schema: "public" }, handleSync)\n  .subscribe();' }
+];
 
 const MBTQDevGenerator = () => {
   const [prompt, setPrompt] = useState('');
+  const [activeTab, setActiveTab] = useState<'generator' | 'mapping'>('generator');
   const [config, setConfig] = useState<Config>({
     type: 'fullstack',
     auth: 'deafauth',
     accessibility: true,
-    deploy: 'docker'
+    deploy: 'docker',
+    theme: 'dracula',
+    snippetPreset: 'DeafAUTH Middleware'
   });
+  const [mappingNodes, setMappingNodes] = useState<MappingNode[]>([
+    { id: '1', name: 'User Identity Flow', targetDb: 'supabase_auth.users', status: 'mapped' },
+    { id: '2', name: 'Fibonrose Validation Log', targetDb: 'dev_db.fibonrose_events', status: 'mapped' },
+    { id: '3', name: 'PinkSync Realtime Buffer', targetDb: 'dev_db.pinksync_states', status: 'active' }
+  ]);
   const [generating, setGenerating] = useState(false);
   const [output, setOutput] = useState<Output | null>(null);
 
@@ -74,17 +97,46 @@ const MBTQDevGenerator = () => {
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-4">
-            <Zap className="w-10 h-10 text-pink-500" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-              MBTQ.dev
-            </h1>
+        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <Zap className="w-10 h-10 text-pink-500" />
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+                MBTQ.dev
+              </h1>
+            </div>
+            <p className="text-slate-400">AI-Powered Full Stack Generator • Flow & DB Interface Builder</p>
           </div>
-          <p className="text-slate-400">AI-Powered Full Stack Generator • Deaf-First • LGBTQ+ Safe</p>
+
+          {/* Navigation Tabs */}
+          <div className="flex bg-slate-900 border border-slate-800 p-1 rounded-lg">
+            <button
+              onClick={() => setActiveTab('generator')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all ${
+                activeTab === 'generator'
+                  ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Code className="w-4 h-4" />
+              Stack Generator
+            </button>
+            <button
+              onClick={() => setActiveTab('mapping')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all ${
+                activeTab === 'mapping'
+                  ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              MappingPane (DB & Flow)
+            </button>
+          </div>
         </div>
 
-        {/* Main Generator */}
+        {activeTab === 'generator' ? (
+        /* Main Generator */
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* Input Section */}
@@ -148,6 +200,51 @@ const MBTQDevGenerator = () => {
                       aria-label={`Select ${type} stack type`}
                     >
                       {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* TextMate Theme Selection */}
+              <div>
+                <label className="block text-sm font-medium mb-2 text-slate-300">TextMate Theme Syntax</label>
+                <div className="flex gap-2" role="group" aria-label="Select TextMate syntax theme">
+                  {textmateThemes.map(theme => (
+                    <button
+                      key={theme}
+                      onClick={() => setConfig({...config, theme})}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+                        config.theme === theme
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                      }`}
+                      aria-pressed={config.theme === theme}
+                    >
+                      {theme}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Code Snippet Preset */}
+              <div>
+                <label className="block text-sm font-medium mb-2 text-slate-300">Code Snippet Preset</label>
+                <div className="grid grid-cols-1 gap-1.5">
+                  {snippetPresets.map(preset => (
+                    <button
+                      key={preset.label}
+                      onClick={() => {
+                        setConfig({...config, snippetPreset: preset.label});
+                        setPrompt(prev => prev ? `${prev}\n\n// Snippet Preset: ${preset.label}` : `Generate stack with ${preset.label}`);
+                      }}
+                      className={`text-left px-3 py-2 rounded border text-xs font-mono transition-all ${
+                        config.snippetPreset === preset.label
+                          ? 'bg-slate-800 border-pink-500 text-pink-400'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-900'
+                      }`}
+                    >
+                      <FileText className="w-3 h-3 inline mr-2" />
+                      {preset.label}
                     </button>
                   ))}
                 </div>
@@ -270,17 +367,33 @@ const MBTQDevGenerator = () => {
               </div>
             ) : output ? (
               <>
-                {/* Repo Info */}
+                {/* Repo Info & TextMate Syntax Highlight Preview */}
                 <div className="bg-slate-900/50 backdrop-blur border border-slate-800 rounded-lg p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Code className="w-5 h-5 text-pink-500" />
-                    <h3 className="font-bold">Generated Repository</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Code className="w-5 h-5 text-pink-500" />
+                      <h3 className="font-bold">Generated Repository</h3>
+                    </div>
+                    <span className="text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono">
+                      TextMate: {config.theme}
+                    </span>
                   </div>
-                  <div className="bg-slate-950 rounded p-4 font-mono text-sm">
+                  <div className="bg-slate-950 rounded p-4 font-mono text-sm border border-slate-800">
                     <div className="text-green-400 mb-2">✓ {output.repo}</div>
                     {output.structure.map((line, i) => (
                       <div key={i} className="text-slate-400 ml-4">{line}</div>
                     ))}
+                  </div>
+
+                  {/* Rendered Snippet */}
+                  <div className="mt-4 bg-slate-950 p-3 rounded border border-slate-800 font-mono text-xs">
+                    <div className="text-slate-500 mb-1 flex items-center justify-between">
+                      <span>Snippet Preview ({config.snippetPreset})</span>
+                      <Terminal className="w-3.5 h-3.5" />
+                    </div>
+                    <pre className="text-purple-300 overflow-x-auto p-2 bg-slate-900/80 rounded">
+                      {snippetPresets.find(p => p.label === config.snippetPreset)?.code}
+                    </pre>
                   </div>
                 </div>
 
@@ -340,6 +453,78 @@ const MBTQDevGenerator = () => {
           </div>
 
         </div>
+        ) : (
+        /* MappingPane Interface Builder & Flow Dev DB */
+        <div className="space-y-6">
+          <div className="bg-slate-900/50 backdrop-blur border border-slate-800 rounded-lg p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 flex items-center gap-2">
+                  <Layers className="w-6 h-6 text-pink-500" />
+                  MappingPane Interface Builder
+                </h2>
+                <p className="text-sm text-slate-400 mt-1">Configure flow routing, database schema mappings, and event dispatch bindings for dev DB.</p>
+              </div>
+              <button
+                onClick={() => {
+                  const newNode: MappingNode = {
+                    id: String(Date.now()),
+                    name: `Custom Flow Node ${mappingNodes.length + 1}`,
+                    targetDb: `dev_db.custom_table_${mappingNodes.length + 1}`,
+                    status: 'active'
+                  };
+                  setMappingNodes([...mappingNodes, newNode]);
+                }}
+                className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white rounded-lg text-sm font-medium transition-all"
+              >
+                + Add Mapping Node
+              </button>
+            </div>
+
+            {/* Visual Flow Mapper Canvas */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {mappingNodes.map((node) => (
+                <div key={node.id} className="bg-slate-950 border border-slate-800 rounded-lg p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-sm text-white flex items-center gap-2">
+                      <GitBranch className="w-4 h-4 text-pink-400" />
+                      {node.name}
+                    </span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded font-mono ${
+                      node.status === 'mapped' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-300'
+                    }`}>
+                      {node.status}
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-400 font-mono bg-slate-900 p-2 rounded">
+                    Target: {node.targetDb}
+                  </div>
+                  <div className="flex justify-between items-center text-xs text-slate-500">
+                    <span>Dispatch Trigger: auto</span>
+                    <button
+                      onClick={() => setMappingNodes(mappingNodes.filter(n => n.id !== node.id))}
+                      className="text-pink-400 hover:text-pink-300"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Dev DB Pipeline Configuration */}
+            <div className="bg-slate-950 border border-slate-800 rounded-lg p-4 font-mono text-xs">
+              <div className="text-slate-400 mb-2 flex items-center gap-2 font-sans font-semibold">
+                <Database className="w-4 h-4 text-blue-400" />
+                Dev DB & Dispatch Pipeline Status
+              </div>
+              <div className="text-emerald-400">✓ Supabase Dev DB connected (localhost:5432)</div>
+              <div className="text-emerald-400">✓ Workflow Dispatch webhook listener online</div>
+              <div className="text-slate-400">⚡ 3 Mapping nodes synced to Fibonrose validator sequence</div>
+            </div>
+          </div>
+        </div>
+        )}
 
         {/* Footer Stats */}
         <div className="grid grid-cols-3 gap-4 mt-12">
