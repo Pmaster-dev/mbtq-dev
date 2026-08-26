@@ -51,6 +51,9 @@ const MBTQDevGenerator = () => {
     theme: 'dracula',
     snippetPreset: 'DeafAUTH Middleware'
   });
+  const [customSnippet, setCustomSnippet] = useState<string>(
+    snippetPresets[0].code
+  );
   const [mappingNodes, setMappingNodes] = useState<MappingNode[]>([
     { id: '1', name: 'User Identity Flow', targetDb: 'supabase_auth.users', status: 'mapped' },
     { id: '2', name: 'Fibonrose Validation Log', targetDb: 'dev_db.fibonrose_events', status: 'mapped' },
@@ -235,6 +238,7 @@ const MBTQDevGenerator = () => {
                       key={preset.label}
                       onClick={() => {
                         setConfig({...config, snippetPreset: preset.label});
+                        setCustomSnippet(preset.code);
                         setPrompt(prev => prev ? `${prev}\n\n// Snippet Preset: ${preset.label}` : `Generate stack with ${preset.label}`);
                       }}
                       className={`text-left px-3 py-2 rounded border text-xs font-mono transition-all ${
@@ -385,15 +389,38 @@ const MBTQDevGenerator = () => {
                     ))}
                   </div>
 
-                  {/* Rendered Snippet */}
+                  {/* Rendered Interactive TextMate Editor */}
                   <div className="mt-4 bg-slate-950 p-3 rounded border border-slate-800 font-mono text-xs">
-                    <div className="text-slate-500 mb-1 flex items-center justify-between">
-                      <span>Snippet Preview ({config.snippetPreset})</span>
-                      <Terminal className="w-3.5 h-3.5" />
+                    <div className="text-slate-400 mb-2 flex items-center justify-between font-sans">
+                      <span className="flex items-center gap-2 font-medium">
+                        <Terminal className="w-3.5 h-3.5 text-pink-400" />
+                        TextMate Code Editor ({config.snippetPreset})
+                      </span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">
+                        Grammar: source.ts · {config.theme}
+                      </span>
                     </div>
-                    <pre className="text-purple-300 overflow-x-auto p-2 bg-slate-900/80 rounded">
-                      {snippetPresets.find(p => p.label === config.snippetPreset)?.code}
-                    </pre>
+                    <div className={`p-3 rounded border transition-colors ${
+                      config.theme === 'dracula' ? 'bg-[#282a36] border-[#44475a] text-[#f8f8f2]' :
+                      config.theme === 'monokai' ? 'bg-[#272822] border-[#3e3d32] text-[#f8f8f2]' :
+                      config.theme === 'nord' ? 'bg-[#2e3440] border-[#4c566a] text-[#d8dee9]' :
+                      'bg-[#282c34] border-[#3e4451] text-[#abb2bf]'
+                    }`}>
+                      <div className="flex gap-3">
+                        <div className="select-none text-slate-500 text-right pr-2 border-r border-slate-700/50 font-mono text-xs">
+                          {customSnippet.split('\n').map((_, i) => (
+                            <div key={i}>{i + 1}</div>
+                          ))}
+                        </div>
+                        <textarea
+                          value={customSnippet}
+                          onChange={(e) => setCustomSnippet(e.target.value)}
+                          className="w-full bg-transparent resize-y font-mono text-xs focus:outline-none focus:ring-1 focus:ring-pink-500 rounded p-1 text-inherit"
+                          rows={Math.max(4, customSnippet.split('\n').length)}
+                          aria-label="TextMate Code Editor"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
