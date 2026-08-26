@@ -37,7 +37,8 @@ const textmateThemes = ['dracula', 'monokai', 'nord', 'one-dark'];
 const snippetPresets = [
   { label: 'DeafAUTH Middleware', code: '// TextMate Syntax: TypeScript\nexport const authMiddleware = async (req: Request) => {\n  const token = req.headers.get("x-deafauth-token");\n  return await verifyDeafAuth(token);\n};' },
   { label: 'Fibonrose Validator Flow', code: '// TextMate Syntax: TypeScript\nexport const validateTask = (checkpoint: number, evidence: string) => {\n  return fibonrose.confirm({ checkpoint, evidence });\n};' },
-  { label: 'Supabase Realtime Sync', code: '// TextMate Syntax: TypeScript\nconst channel = supabase.channel("pinksync")\n  .on("postgres_changes", { event: "*", schema: "public" }, handleSync)\n  .subscribe();' }
+  { label: 'Supabase Realtime Sync', code: '// TextMate Syntax: TypeScript\nconst channel = supabase.channel("pinksync")\n  .on("postgres_changes", { event: "*", schema: "public" }, handleSync)\n  .subscribe();' },
+  { label: 'oRPC Zod & Edge KV Scaffold', code: '// TextMate Syntax: TypeScript (oRPC + Zod + Deno KV)\nimport { z } from "zod";\nimport { os } from "@orpc/server";\n\nconst InputSchema = z.object({\n  key: z.string(),\n  payload: z.record(z.unknown())\n});\n\nexport const edgeKvHandler = os\n  .input(InputSchema)\n  .handler(async ({ input }) => {\n    const kv = await Deno.openKv();\n    await kv.set(["mbtq", input.key], input.payload);\n    const res = await kv.get(["mbtq", input.key]);\n    return { status: "ok", data: res.value };\n  });' }
 ];
 
 const MBTQDevGenerator = () => {
