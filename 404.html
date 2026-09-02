@@ -175,9 +175,26 @@
         <div class="buttons">
             <a href="/" class="btn btn-primary">🏠 Go Home</a>
             <a href="https://github.com/pinkycollie/mbtq-dev" class="btn btn-secondary" target="_blank">
-                📚 View Documentation
+                📚 View Documentation (@pinkycollie)
             </a>
         </div>
+
+        <script>
+            // Single Page Application (SPA) redirection trigger for GitHub Pages
+            (function() {
+                var pathSegments = window.location.pathname.split('/');
+                if (pathSegments.length > 2) {
+                    var l = window.location;
+                    l.replace(
+                        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+                        l.pathname.split('/').slice(0, 1).join('/') + '/?p=' +
+                        encodeURIComponent(l.pathname.slice(1)) +
+                        (l.search ? '&q=' + encodeURIComponent(l.search.slice(1)) : '') +
+                        l.hash
+                    );
+                }
+            })();
+        </script>
 
         <div class="helpful-links">
             <h2>🌟 You might be looking for:</h2>
