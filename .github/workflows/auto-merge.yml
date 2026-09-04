@@ -1,6 +1,7 @@
 name: Auto-merge Dependabot PRs
 
 on:
+  workflow_dispatch:
   pull_request_target:
     types: [opened, synchronize, reopened]
 
@@ -20,6 +21,7 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Wait for CI checks to pass
+        id: wait
         uses: lewagon/wait-on-check-action@v1.3.3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
