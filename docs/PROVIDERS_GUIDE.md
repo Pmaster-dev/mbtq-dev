@@ -49,6 +49,19 @@ console.log(statuses);
 
 ---
 
+## 🌐 Web App & Internal API Doc Mirrors
+
+For offline resilience and fast developer reference, MBTQ mirrors internal API specs and provider documentation endpoints:
+
+| Endpoint Route | Method | Target / Mirror Content |
+|----------------|--------|--------------------------|
+| `/api/providers/status` | GET | Live status audit of all external providers |
+| `/api/webhooks/register` | POST | Webhook listener registration for real-time provider dispatches |
+| `/docs/openapi.yaml` | GET | OpenAPI 3.0 specification for internal server routes |
+| `/docs/llm-deno-supabase-setup.md` | GET | Mirror for Supabase, Deno Edge Functions & LLM setup |
+
+---
+
 ## 🧪 Testing Provider Integrations
 
 Run unit tests for provider verification:
