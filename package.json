@@ -5,6 +5,11 @@
   "description": "MBTQ Orchestration Hub - User-Led Accessibility & Developer Autonomy",
   "scripts": {
     "dev": "next dev",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "test:client": "cd client && npm test -- --watch=false",
+    "test:fibonrose": "cd fibonrose && npm test",
+    "test:all": "npm run test:client && npm run test:fibonrose",
     "build": "next build",
     "start": "node .next/standalone/server.js",
     "lint": "next lint",
