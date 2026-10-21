@@ -15,7 +15,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
-    "axios": "^1.16.0",
+    "axios": "^1.18.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^4.22.2",
@@ -29,7 +29,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^24.10.1",
-    "prisma": "^7.8.0",
+    "prisma": "^7.9.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
